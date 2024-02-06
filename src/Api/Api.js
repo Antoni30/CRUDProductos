@@ -1,9 +1,9 @@
-import {bd} from './firebaseApi'
 import { addDoc, collection, deleteDoc, doc, getDocs} from 'firebase/firestore/lite';
+import { database } from './firebaseApi';
 
 export const postProducts = async (product) => {
     try {
-        const getCollection = await collection(bd,'products');
+        const getCollection = await collection(database,'products');
         await addDoc(getCollection,product)
         console.log('Producto agregado correctamente');
     } catch (error) {
@@ -12,7 +12,7 @@ export const postProducts = async (product) => {
 };
 export const getProducs = async ()=>{
     try{
-        const getCollection = await collection(bd, 'products');
+        const getCollection = await collection(database, 'products');
         const docsE = await getDocs(getCollection);
         
         const listProducts = docsE.docs.map(doc => ({
@@ -27,7 +27,7 @@ export const getProducs = async ()=>{
 }
 export const updateProduct = async(productId,newData)=>{
     try{
-        const productRef = await doc(bd, 'products', productId);
+        const productRef = await doc(database, 'products', productId);
         await updateDoc(productRef, newData);
         console.log('Producto actualizado correctamente');
     }catch(error){
@@ -36,7 +36,7 @@ export const updateProduct = async(productId,newData)=>{
 }
 export const deleteProduct = async(productId)=>{
     try{
-        const productRef = doc(bd, 'products', productId);
+        const productRef = doc(database, 'products', productId);
         await deleteDoc(productRef)
         console.log('Producto eliminado  correctamente');
     }catch(error){
