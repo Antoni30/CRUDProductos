@@ -3,6 +3,10 @@ import { getProducs, deleteProduct, updateProduct } from "../Api/Api";
 
 const ProductList = () => {
   const [products, setProducts] = useState([]);
+  const [nombre, setNombre] = useState(products.nombre);
+  const [descripcion, setDescripcion] = useState("");
+  const [precio, setPrecio] = useState("");
+  const [isEditing, setIsEditing] = useState(0);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -49,12 +53,34 @@ const ProductList = () => {
   const updateProductId = (id) => {
     try {
       const product = products.find((product) => product.id === id);
-      updateProduct(id, product.data);
-      // setProducts(products.filter((product) => product.id !== id));
+
+      nombre
+        ? (product.data.nombre = nombre)
+        : (product.data.nombre = product.data.nombre);
+      descripcion
+        ? (product.data.descripcion = descripcion)
+        : (product.data.descripcion = product.data.descripcion);
+      precio
+        ? (product.data.precio = precio)
+        : (product.data.precio = product.data.precio);
+
+      console.log(product);
+
+      // setProducts(
+      //   products.map((product) => (product.id === id ? newProduct : product))
+      // );
+      // console.log(newProduct);
+      setIsEditing(null);
+      updateProduct(id, product);
+      // setProducts(products.filter((newProduct) => product.id !== id));
       //   window.location = "/products";
     } catch (err) {
       console.error(err.message);
     }
+  };
+
+  const handleEditClick = (id) => {
+    setIsEditing(id);
   };
 
   const onChangeHandler = (id, key, value) => {
@@ -83,44 +109,59 @@ const ProductList = () => {
             <td>{index + 1}</td>
             <td>
               <div>
-                <span
-                  contentEditable
-                  onInput={(e) =>
-                    onChangeHandler(product.id, "nombre", e.target.value)
-                  }
-                >
-                  {product.data.nombre}
-                </span>
+                {isEditing === product.id ? (
+                  <input
+                    placeholder={product.data.nombre}
+                    onChange={(e) => setNombre(e.target.value)}
+                  />
+                ) : (
+                  <span>{product.data.nombre}</span>
+                )}
               </div>
             </td>
             <td>
-              <span
-                contentEditable
-                onBlur={(e) =>
-                  onChangeHandler(product.id, "nombre", e.target.value)
-                }
-              >
-                {product.data.descripcion}
-              </span>
+              <div>
+                {isEditing === product.id ? (
+                  <input
+                    placeholder={product.data.descripcion}
+                    onChange={(e) => setDescripcion(e.target.value)}
+                  />
+                ) : (
+                  <span>{product.data.descripcion}</span>
+                )}
+              </div>
             </td>
             <td>
-              <span
-                contentEditable
-                onChange={(e) =>
-                  onChangeHandler(product.id, "precio", e.target.value)
-                }
-              >
-                {product.data.precio}
-              </span>
+              <div>
+                {isEditing === product.id ? (
+                  <input
+                    placeholder={product.data.precio}
+                    onChange={(e) => setPrecio(e.target.value)}
+                  />
+                ) : (
+                  <span>{product.data.precio}</span>
+                )}
+              </div>
             </td>
             <td className="items-center justify-center">
               <tr>
-                <button
-                  className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-3 rounded m-1"
-                  onClick={() => updateProductId(product.id)}
-                >
-                  Update
-                </button>
+                {isEditing === product.id ? (
+                  <button
+                    className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-3 rounded m-1"
+                    onClick={() => updateProductId(product.id)}
+                    // onClick={() => updateProductId(product.id)}
+                  >
+                    Update
+                  </button>
+                ) : (
+                  <button
+                    className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-3 rounded m-1"
+                    onClick={() => handleEditClick(product.id)}
+                    // onClick={() => updateProductId(product.id)}
+                  >
+                    Edit
+                  </button>
+                )}
               </tr>
               <tr>
                 <button
