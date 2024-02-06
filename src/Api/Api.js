@@ -1,5 +1,5 @@
 import bd from './firebaseApi'
-import { addDoc, collection, deleteDoc, getDocs} from 'firebase/firestore/lite';
+import { addDoc, collection, deleteDoc, doc, getDocs} from 'firebase/firestore/lite';
 
 export const postProducts = async (product) => {
     try {
@@ -27,7 +27,7 @@ export const getProducs = async ()=>{
 }
 export const updateProduct = async(productId,newData)=>{
     try{
-        const productRef = doc(bd, 'products', productId);
+        const productRef = await doc(bd, 'products', productId);
         await updateDoc(productRef, newData);
         console.log('Producto actualizado correctamente');
     }catch(error){
