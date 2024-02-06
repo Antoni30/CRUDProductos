@@ -1,4 +1,4 @@
-import bd from './firebaseApi'
+import {bd} from './firebaseApi'
 import { addDoc, collection, deleteDoc, doc, getDocs} from 'firebase/firestore/lite';
 
 export const postProducts = async (product) => {
