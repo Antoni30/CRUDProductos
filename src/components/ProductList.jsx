@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import io from 'socket.io-client';
+// import io from 'socket.io-client';
 import { EditableText } from "@blueprintjs/core";
 import { getProducs } from '../Api/Api';
 
@@ -109,7 +109,7 @@ const ProductList = () => {
                         <td className='items-center justify-center'>
                             <tr>
                                 <button
-                                    className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded m-2"
+                                    className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-3 rounded m-1"
                                     onClick={() => updateProduct(product.id)}
                                 >
                                     Update
@@ -117,7 +117,7 @@ const ProductList = () => {
                             </tr>
                             <tr>
                                 <button
-                                    className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                                    className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded m-1"
                                     onClick={() => deleteProduct(product.id)}
                                 >
                                     Delete
