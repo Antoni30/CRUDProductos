@@ -1,135 +1,152 @@
-import { useState, useEffect } from 'react';
-// import io from 'socket.io-client';
-import { EditableText } from "@blueprintjs/core";
-import { getProducs } from '../Api/Api';
+import { useState, useEffect } from "react";
+import { getProducs, deleteProduct, updateProduct } from "../Api/Api";
 
 const ProductList = () => {
-    const [products, setProducts] = useState([]);
-    
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                // const response = await fetch('http://localhost:5000/users');
-                const response = await getProducs(); 
-                // console.log(response);  
-                setProducts(response);                       
-                // const data = await response.json();
-                // console.log(data);
-                // setProducts(data);
-            } catch (err) {
-                console.error(err);
-            }
-        };
+  const [products, setProducts] = useState([]);
+  const [nombre, setNombre] = useState(products.nombre);
+  const [descripcion, setDescripcion] = useState("");
+  const [precio, setPrecio] = useState("");
+  const [isEditing, setIsEditing] = useState(0);
 
-        fetchData();
-
-        // const socket = io('http://localhost:5000/users');
-        // socket.on('newProduct', (newProduct) => {
-        //     setProducts((prevProducts) => [...prevProducts, newProduct]);
-        // });
-
-        // return () => {
-        //     socket.disconnect();
-        // };
-    }, []);
-
-    const deleteProduct = (id) => {
-        try {
-            fetch(`http://localhost:5000/users/${id}`, {
-                method: 'DELETE',
-            }).then(() => {
-                setProducts(products.filter((product) => product.id !== id));
-            });
-            
-        } catch (err) {
-            console.error(err.message);
-        }
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await getProducs();
+        setProducts(response);
+      } catch (err) {
+        console.error(err);
+      }
     };
 
-    const updateProduct = (id) => {
-        try {
-            const product = products.find((product) => product.id === id);
-            fetch(`http://localhost:5000/products/${id}`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(product),
-            }).then(() => {
-                setProducts(products.filter((product) => product.id !== id));
-            });
-            window.location = '/';
-        } catch (err) {
-            console.error(err.message);
-        }
-    };
+    fetchData();
+  }, []);
 
+  const deleteProductId = (id) => {
+    try {
+      deleteProduct(id);
+      setProducts(products.filter((product) => product.id !== id));
+    } catch (err) {
+      console.error(err.message);
+    }
+  };
 
-    const onChangeHandler = (id, key, value) => {
-        setProducts(values => {
-          return values.map(item =>
-            item.id === id ? { ...item, [key]: value } : item
-          )
-        })
-    };
+  const updateProductId = (id) => {
+    try {
+      const product = products.find((product) => product.id === id);
+      console.log(product);
 
-    return (
-        <table className="table-auto border-separate border-spacing-4 border">
-            <thead>
-                <tr>
-                    <th>Id</th>
-                    <th>Name</th>
-                    <th>Description</th>
-                    <th>Price</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                
-                {products.map((product, index) => (        
-                               
-                    <tr key={product.id}>
-                        <td>{index + 1}</td>
-                        <td>
-                            <EditableText
-                            value={product.data.nombre}
-                            onChange={value => onChangeHandler(product.id, "nombre", value)}
-                            />
-                        </td>
-                        <td>
-                            <EditableText
-                            value={product.data.descripcion}
-                            onChange={value => onChangeHandler(product.id, "descripcion", value)}
-                            />
-                        </td>
-                        <td>
-                            <EditableText
-                            value={product.data.precio}
-                            onChange={value => onChangeHandler(product.id, "precio", value)}
-                            />
-                        </td>
-                        <td className='items-center justify-center'>
-                            <tr>
-                                <button
-                                    className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-3 rounded m-1"
-                                    onClick={() => updateProduct(product.id)}
-                                >
-                                    Update
-                                </button>
-                            </tr>
-                            <tr>
-                                <button
-                                    className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded m-1"
-                                    onClick={() => deleteProduct(product.id)}
-                                >
-                                    Delete
-                                </button>
-                            </tr>
-                        </td>
-                    </tr>
-                ))}
-            </tbody>
-        </table>
-    );
+      const newNombre = nombre ? nombre : product.data.nombre;
+      const newDescripcion = descripcion
+        ? descripcion
+        : product.data.descripcion;
+      const newPrecio = precio ? precio : product.data.precio;
 
+      const newProduct = {
+        nombre: newNombre,
+        descripcion: newDescripcion,
+        precio: newPrecio,
+      };
+
+      setProducts(
+        products.map((product) =>
+          product.id === id ? { ...product, data: newProduct } : product
+        )
+      );
+      console.log(newProduct);
+      setIsEditing(null);
+      updateProduct(id, newProduct);
+    } catch (err) {
+      console.error(err.message);
+    }
+  };
+
+  const handleEditClick = (id) => {
+    setIsEditing(id);
+  };
+
+  return (
+    <table className="table-auto border-separate border-spacing-4 border">
+      <thead>
+        <tr>
+          <th>Id</th>
+          <th>Name</th>
+          <th>Description</th>
+          <th>Price</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {products.map((product, index) => (
+          <tr key={product.id}>
+            <td>{index + 1}</td>
+            <td>
+              <div>
+                {isEditing === product.id ? (
+                  <input
+                    placeholder={product.data.nombre}
+                    onChange={(e) => setNombre(e.target.value)}
+                  />
+                ) : (
+                  <span>{product.data.nombre}</span>
+                )}
+              </div>
+            </td>
+            <td>
+              <div>
+                {isEditing === product.id ? (
+                  <input
+                    placeholder={product.data.descripcion}
+                    onChange={(e) => setDescripcion(e.target.value)}
+                  />
+                ) : (
+                  <span>{product.data.descripcion}</span>
+                )}
+              </div>
+            </td>
+            <td>
+              <div>
+                {isEditing === product.id ? (
+                  <input
+                    placeholder={product.data.precio}
+                    onChange={(e) => setPrecio(e.target.value)}
+                  />
+                ) : (
+                  <span>{product.data.precio}</span>
+                )}
+              </div>
+            </td>
+            <td className="items-center justify-center">
+              <tr>
+                {isEditing === product.id ? (
+                  <button
+                    className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-3 rounded m-1"
+                    onClick={() => updateProductId(product.id)}
+                  >
+                    Update
+                  </button>
+                ) : (
+                  <button
+                    className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-3 rounded m-1"
+                    onClick={() => handleEditClick(product.id)}
+                  >
+                    Edit
+                  </button>
+                )}
+              </tr>
+              <tr>
+                <button
+                  className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded m-1"
+                  onClick={() => deleteProductId(product.id)}
+                >
+                  Delete
+                </button>
+              </tr>
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
 };
 
 export default ProductList;
