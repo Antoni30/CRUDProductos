@@ -25,7 +25,7 @@ function MainPage() {
   };
   useEffect(() => {
     if (login) navigate("/products");
-  }, [login]);
+  }, [login,navigate]);
 
   return (
     <div className="flex w-full h-screen justify-center items-center">

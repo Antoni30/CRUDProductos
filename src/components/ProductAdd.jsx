@@ -18,7 +18,6 @@ const ProductAdd = () => {
       setName("");
       setDescription("");
       setPrice("");
-      window.location = "/products";
     } catch (err) {
       console.error(err.message);
     }

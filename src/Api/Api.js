@@ -72,7 +72,7 @@ export const register = async (user) => {
 };
 export const loginS = async (user) => {
   try {
-    const response = await signInWithEmailAndPassword(
+      await signInWithEmailAndPassword(
       FIREBASE_AUTH,
       user.email,
       user.password

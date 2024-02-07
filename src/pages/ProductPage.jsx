@@ -9,7 +9,7 @@ const ProductPage = () => {
   const navigate = useNavigate();
   useEffect(() => {
     if (!login) navigate("/");
-  }, [login]);
+  }, [login,navigate]);
   return (
     <div className="w-full h-screen">
       <div className="flex justify-center items-center h-full gap-10">
