@@ -39,6 +39,7 @@ export const getProducs = async () => {
 export const updateProduct = async (productId, newData) => {
   try {
     const productRef = await doc(database, "products", productId);
+    console.log(newData);
     await updateDoc(productRef, newData);
     console.log("Producto actualizado correctamente");
   } catch (error) {
