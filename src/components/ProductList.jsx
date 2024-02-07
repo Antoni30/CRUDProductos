@@ -11,40 +11,20 @@ const ProductList = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // const response = await fetch('http://localhost:5000/users');
         const response = await getProducs();
-        // console.log(response);
         setProducts(response);
-        // const data = await response.json();
-        // console.log(data);
-        // setProducts(data);
       } catch (err) {
         console.error(err);
       }
     };
 
     fetchData();
-
-    // const socket = io('http://localhost:5000/users');
-    // socket.on('newProduct', (newProduct) => {
-    //     setProducts((prevProducts) => [...prevProducts, newProduct]);
-    // });
-
-    // return () => {
-    //     socket.disconnect();
-    // };
   }, []);
 
   const deleteProductId = (id) => {
     try {
-      // fetch(`http://localhost:5000/users/${id}`, {
-      //     method: 'DELETE',
-      // }).then(() => {
-      //     setProducts(products.filter((product) => product.id !== id));
-      // });
       deleteProduct(id);
       setProducts(products.filter((product) => product.id !== id));
-      //   window.location = "/products";
     } catch (err) {
       console.error(err.message);
     }
@@ -53,27 +33,28 @@ const ProductList = () => {
   const updateProductId = (id) => {
     try {
       const product = products.find((product) => product.id === id);
-
-      nombre
-        ? (product.data.nombre = nombre)
-        : (product.data.nombre = product.data.nombre);
-      descripcion
-        ? (product.data.descripcion = descripcion)
-        : (product.data.descripcion = product.data.descripcion);
-      precio
-        ? (product.data.precio = precio)
-        : (product.data.precio = product.data.precio);
-
       console.log(product);
 
-      // setProducts(
-      //   products.map((product) => (product.id === id ? newProduct : product))
-      // );
-      // console.log(newProduct);
+      const newNombre = nombre ? nombre : product.data.nombre;
+      const newDescripcion = descripcion
+        ? descripcion
+        : product.data.descripcion;
+      const newPrecio = precio ? precio : product.data.precio;
+
+      const newProduct = {
+        nombre: newNombre,
+        descripcion: newDescripcion,
+        precio: newPrecio,
+      };
+
+      setProducts(
+        products.map((product) =>
+          product.id === id ? { ...product, data: newProduct } : product
+        )
+      );
+      console.log(newProduct);
       setIsEditing(null);
-      updateProduct(id, product);
-      // setProducts(products.filter((newProduct) => product.id !== id));
-      //   window.location = "/products";
+      updateProduct(id, newProduct);
     } catch (err) {
       console.error(err.message);
     }
@@ -81,15 +62,6 @@ const ProductList = () => {
 
   const handleEditClick = (id) => {
     setIsEditing(id);
-  };
-
-  const onChangeHandler = (id, key, value) => {
-    setProducts((values) => {
-      console.log("On Change", values);
-      return values.map((item) =>
-        item.id === id ? { ...item, [key]: value } : item
-      );
-    });
   };
 
   return (
@@ -149,7 +121,6 @@ const ProductList = () => {
                   <button
                     className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-3 rounded m-1"
                     onClick={() => updateProductId(product.id)}
-                    // onClick={() => updateProductId(product.id)}
                   >
                     Update
                   </button>
@@ -157,7 +128,6 @@ const ProductList = () => {
                   <button
                     className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-3 rounded m-1"
                     onClick={() => handleEditClick(product.id)}
-                    // onClick={() => updateProductId(product.id)}
                   >
                     Edit
                   </button>
