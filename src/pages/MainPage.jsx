@@ -4,7 +4,7 @@ import userAuth from "../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 
 function MainPage() {
-  const { authLogin, registerR,login } = userAuth();
+  const { authLogin, registerR, login } = userAuth();
   const navigate = useNavigate();
   const { register: loginRegister, handleSubmit: handleLoginSubmit } =
     useForm();
@@ -24,11 +24,11 @@ function MainPage() {
     setEmail(e.target.value);
   };
   useEffect(() => {
-    if(login) navigate('/products');
+    if (login) navigate("/products");
   }, [login]);
 
   return (
-    <div className="flex">
+    <div className="flex w-full h-screen justify-center items-center">
       {/* INICIAR SESIÓN */}
       <div className="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-lg">

@@ -119,14 +119,14 @@ const ProductList = () => {
               <tr>
                 {isEditing === product.id ? (
                   <button
-                    className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-3 rounded m-1"
+                    className="bg-green-500 w-full hover:bg-green-700 text-white font-bold py-2 px-3 rounded m-1"
                     onClick={() => updateProductId(product.id)}
                   >
                     Update
                   </button>
                 ) : (
                   <button
-                    className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-3 rounded m-1"
+                    className="bg-yellow-500 w-full hover:bg-yellow-700 text-white font-bold py-2 px-3 rounded m-1"
                     onClick={() => handleEditClick(product.id)}
                   >
                     Edit
@@ -135,7 +135,7 @@ const ProductList = () => {
               </tr>
               <tr>
                 <button
-                  className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded m-1"
+                  className="bg-red-500 w-full hover:bg-red-700 text-white font-bold py-2 px-4 rounded m-1"
                   onClick={() => deleteProductId(product.id)}
                 >
                   Delete

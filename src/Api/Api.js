@@ -7,7 +7,7 @@ import {
   updateDoc,
 } from "firebase/firestore/lite";
 import { database } from "./firebaseApi";
-import {FIREBASE_AUTH} from './firebaseApi'
+import { FIREBASE_AUTH } from "./firebaseApi";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
@@ -63,8 +63,11 @@ export const register = async (user) => {
       user.email2,
       user.password22
     );
+    console.log(response.error)
+    return true;
   } catch (error) {
-    console.log("Usuario Invalido");
+    console.log(error.data);
+    return false;
   }
 };
 export const loginS = async (user) => {
@@ -74,8 +77,9 @@ export const loginS = async (user) => {
       user.email,
       user.password
     );
+    return true;
   } catch (error) {
     console.log("Usuario Invalido");
+    return false;
   }
 };
-
