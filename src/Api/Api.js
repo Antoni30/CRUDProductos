@@ -4,6 +4,7 @@ import {
   deleteDoc,
   doc,
   getDocs,
+  updateDoc,
 } from "firebase/firestore/lite";
 import { database } from "./firebaseApi";
 import {FIREBASE_AUTH} from './firebaseApi'
