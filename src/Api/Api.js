@@ -4,9 +4,13 @@ import {
   deleteDoc,
   doc,
   getDocs,
-  updateDoc,
 } from "firebase/firestore/lite";
 import { database } from "./firebaseApi";
+import {FIREBASE_AUTH} from './firebaseApi'
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
 
 export const postProducts = async (product) => {
   try {
@@ -35,7 +39,6 @@ export const getProducs = async () => {
 export const updateProduct = async (productId, newData) => {
   try {
     const productRef = await doc(database, "products", productId);
-    console.log(newData);
     await updateDoc(productRef, newData);
     console.log("Producto actualizado correctamente");
   } catch (error) {
@@ -49,5 +52,27 @@ export const deleteProduct = async (productId) => {
     console.log("Producto eliminado  correctamente");
   } catch (error) {
     console.log(error);
+  }
+};
+export const register = async (user) => {
+  try {
+    const response = await createUserWithEmailAndPassword(
+      FIREBASE_AUTH,
+      user.email2,
+      user.password22
+    );
+  } catch (error) {
+    console.log("Usuario Invalido");
+  }
+};
+export const loginS = async (user) => {
+  try {
+    const response = await signInWithEmailAndPassword(
+      FIREBASE_AUTH,
+      user.email,
+      user.password
+    );
+  } catch (error) {
+    console.log("Usuario Invalido");
   }
 };
